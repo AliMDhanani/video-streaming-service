@@ -1,7 +1,27 @@
-import React from "react";
+import axios from "./axios";
+import React, { useEffect, useState } from "react";
 import "./Banner.css";
+import requests from "./Requests";
 
 const Banner = () => {
+  const [movie, setMovie] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const request = await axios.get(requests.fetchNetflixOriginals);
+      setMovie(
+        request.data.results[
+          Math.floor(Math.random() * request.data.results.length - 1)
+        ]
+      );
+      return request;
+    }
+
+    fetchData();
+  }, []);
+
+  console.log(movie);
+
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
   }
@@ -10,20 +30,20 @@ const Banner = () => {
       className="banner"
       style={{
         backgroundSize: "cover",
-        backgroundImage: `url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Black_flag.svg/1200px-Black_flag.svg.png")`,
+        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
         backgroundPosition: "center center",
       }}
     >
       <div className="banner__contents">
-        <h1 className="banner__title">Movie Name</h1>
+        <h1 className="banner__title">
+          {movie?.title || movie?.name}
+        </h1>
         <div className="banner__buttons">
           <button className="banner__button">Play</button>
           <button className="banner__button">My List</button>
         </div>
         <h1 className="banner__description">
-          {truncate(
-            `this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie this is a test description for the movie`, 200
-          )}
+          {truncate(movie?.overview, 150)}
         </h1>
       </div>
 
