@@ -22,7 +22,7 @@ const Row = ({ title, fetchUrl, isLargeRow = false }) => {
       <h2>{title}</h2>
       <div className="row__posters">
         {movies
-          .filter((movie) => movie.backdrop_path !== null)
+          .filter((movie) => movie.backdrop_path !== null) //filter out movies that have broken image tags
           .map((movie) => (
             <img
               className={`row__poster ${isLargeRow && "row__posterLarge"}`}
